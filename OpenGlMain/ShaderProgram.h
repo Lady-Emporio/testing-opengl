@@ -6,7 +6,7 @@ class ShaderProgram
 	
 public:
 	GLuint shaderProgram;
-	GLuint texture;
+	std::vector< GLuint> textures;
 	ShaderProgram();
 	ShaderProgram(std::string vertex, std::string fragment);
 	~ShaderProgram();

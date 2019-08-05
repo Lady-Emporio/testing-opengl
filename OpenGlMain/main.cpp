@@ -20,7 +20,7 @@ int main(int argc, char** argv) {
 	//shaderProgram1->addShaderFromFile(GL_FRAGMENT_SHADER, PATH + "\GL_FRAGMENT_SHADER_1.txt" );
 	//shaderProgram1->LinkProgram();
 
-	auto shaderProgram2 = std::make_shared<ShaderProgram>(PATH + "\GL_VERTEX_SHADER_3.txt", PATH + "\GL_FRAGMENT_SHADER_3.txt");
+	auto shaderProgram2 = std::make_shared<ShaderProgram>(PATH + "GL_VERTEX_SHADER_3.txt", PATH + "GL_FRAGMENT_SHADER_3.txt");
 
 	//GLfloat vertices[] = {
 	//		-1.0f, 1.0f, 0.0f,//left top
@@ -71,31 +71,46 @@ int main(int argc, char** argv) {
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
 
+	shaderProgram2->addTexture_2D_FromFile(std::string(PATH + "t1.jpg").c_str());
+	shaderProgram2->addTexture_2D_FromFile(std::string(PATH + "container.jpg" ).c_str());
+	
+	//GLuint texture;
+	//glGenTextures(1, &texture);
+	//glBindTexture(GL_TEXTURE_2D, texture);
+	//int width, height;
+	//std::string s_path = std::string((PATH + "t1.jpg"));
+	//const char * path = s_path.c_str();
 
-	std::string s_pathToImage = PATH + "\container.jpg";
-	shaderProgram2->addTexture_2D_FromFile(s_pathToImage);
+	//unsigned char* image = SOIL_load_image(s_path.c_str(),&width, &height, 0, SOIL_LOAD_RGB);
+	//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+	//glGenerateMipmap(GL_TEXTURE_2D);
+	//SOIL_free_image_data(image);
+	//glBindTexture(GL_TEXTURE_2D, 0);
 
+
+	//glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)(6 * sizeof(GLfloat)));
+	//glEnableVertexAttribArray(2);
+
+
+	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+	
 	while (!w->isExit()) {
 		w->lookingEvent();
-
+		glClear(GL_COLOR_BUFFER_BIT);
 		shaderProgram2->use();
 
-		glBindTexture(GL_TEXTURE_2D, shaderProgram2->texture);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, shaderProgram2->textures[0]);
+		glUniform1i(glGetUniformLocation(shaderProgram2->shaderProgram, "ourTexture1"), 0);
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, shaderProgram2->textures[1]);
+		glUniform1i(glGetUniformLocation(shaderProgram2->shaderProgram, "ourTexture2"), 1);
+
 		glBindVertexArray(VAO);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 		glBindVertexArray(0);
 
-		//glBindVertexArray(VAO);
-		//glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
-		//glBindVertexArray(0);
 
-		/*shaderProgram2->use();
-
-		glUniform4f(vertexColorLocation, 0.0f, 1.0f, 0.0f, 1.0f);
-		glBindVertexArray(VAO);
-		glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, (GLvoid*)(3 * sizeof(GL_UNSIGNED_INT)) );
-		glBindVertexArray(0);
-*/
 		w->swapBuffers();
 	}
 	//system("pause");//Чтобы не закрывался.

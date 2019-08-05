@@ -81,7 +81,9 @@ void ShaderProgram::addShaderFromFile(GLenum type, std::string path)
 void ShaderProgram::addTexture_2D_FromFile(std::string path)
 {
 	
-	glGenTextures(1, &this->texture);
+	GLuint texture;
+	
+	glGenTextures(1, &texture);
 	glBindTexture(GL_TEXTURE_2D, texture);
 
 	int width, height;
@@ -90,6 +92,8 @@ void ShaderProgram::addTexture_2D_FromFile(std::string path)
 	glGenerateMipmap(GL_TEXTURE_2D);
 	SOIL_free_image_data(image);
 	glBindTexture(GL_TEXTURE_2D, 0);
+	
+	this->textures.push_back(texture);
 }
 
 void ShaderProgram::use()
