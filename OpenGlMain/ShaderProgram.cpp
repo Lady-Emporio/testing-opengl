@@ -77,3 +77,22 @@ void ShaderProgram::addShaderFromFile(GLenum type, std::string path)
 			Twilight::Error("Cant open:" , path.c_str());
 		}
 }
+
+void ShaderProgram::addTexture_2D_FromFile(std::string path)
+{
+	
+	glGenTextures(1, &this->texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
+
+	int width, height;
+	unsigned char* image = SOIL_load_image(path.c_str(), &width, &height, 0, SOIL_LOAD_RGB);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+	glGenerateMipmap(GL_TEXTURE_2D);
+	SOIL_free_image_data(image);
+	glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+void ShaderProgram::use()
+{
+	glUseProgram(this->shaderProgram);
+}
