@@ -1,7 +1,7 @@
 
 
 
-
+#include "ALL.h"
 #include "Window.h"
 #include "ShaderProgram.h"
 #include <Windows.h>
@@ -54,15 +54,20 @@ int main(int argc, char** argv) {
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
 
+
+	GLint vertexColorLocation = glGetUniformLocation(shaderProgram2->shaderProgram, "ourColor");
+
 	while (!w->isExit()) {
 		w->lookingEvent();
 
 		glUseProgram(shaderProgram1->shaderProgram);
+		
 		glBindVertexArray(VAO);
 		glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
 		glBindVertexArray(0);
 
 		glUseProgram(shaderProgram2->shaderProgram);
+		glUniform4f(vertexColorLocation, 0.0f, 1.0f, 0.0f, 1.0f);
 		glBindVertexArray(VAO);
 		glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, (GLvoid*)(3 * sizeof(GL_UNSIGNED_INT)) );
 		glBindVertexArray(0);
